@@ -119,7 +119,7 @@ def generate_launch_description():
 
     declare_robot_description_arg(
         "rsi_listen_ip",
-        default_value="127.0.0.1",
+        default_value="172.30.1.101",
         description="Own IP address to use for RSI communication",
     )
     declare_robot_description_arg(
@@ -145,17 +145,17 @@ def generate_launch_description():
     #
     # Start driver
     #
-    controllers_config_path = PathJoinSubstitution(
-        [kuka_rsi_driver, "config", "controllers.yaml"]
-    )
-    launch_description.add_action(
-        Node(
-            package="controller_manager",
-            executable="ros2_control_node",
-            output="screen",
-            parameters=[ParameterFile(controllers_config_path, allow_substs=True)],
-        )
-    )
+    # controllers_config_path = PathJoinSubstitution(
+    #     [kuka_rsi_driver, "config", "controllers.yaml"]
+    # )
+    # launch_description.add_action(
+    #     Node(
+    #         package="controller_manager",
+    #         executable="ros2_control_node",
+    #         output="screen",
+    #         parameters=[ParameterFile(controllers_config_path, allow_substs=True)],
+    #     )
+    # )
     launch_description.add_action(
         Node(
             package="robot_state_publisher",
@@ -169,28 +169,28 @@ def generate_launch_description():
     #
     # Spawn controllers
     #
-    def controller_spawner(names, activate=True):
-        inactive_flag = ["--inactive"] if not activate else []
-        return Node(
-            package="controller_manager",
-            executable="spawner",
-            output="screen",
-            arguments=inactive_flag + names,
-        )
+    # def controller_spawner(names, activate=True):
+    #     inactive_flag = ["--inactive"] if not activate else []
+    #     return Node(
+    #         package="controller_manager",
+    #         executable="spawner",
+    #         output="screen",
+    #         arguments=inactive_flag + names,
+    #     )
 
-    launch_description.add_action(
-        controller_spawner(
-            [
-                "joint_state_broadcaster",
-                "pose_broadcaster",
-                "status_broadcaster",
-                "joint_trajectory_controller",
-            ]
-        )
-    )
-    launch_description.add_action(
-        controller_spawner(["forward_position_controller"], activate=False)
-    )
+    # launch_description.add_action(
+    #     controller_spawner(
+    #         [
+    #             "joint_state_broadcaster",
+    #             "pose_broadcaster",
+    #             "status_broadcaster",
+    #             "joint_trajectory_controller",
+    #         ]
+    #     )
+    # )
+    # launch_description.add_action(
+    #     controller_spawner(["forward_position_controller"], activate=False)
+    # )
 
     #
     # Start rviz
