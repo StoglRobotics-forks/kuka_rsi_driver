@@ -1,0 +1,27 @@
+<launch>
+  <!-- Launch arguments -->
+  <arg name="launch_rviz" default="true" description="Whether to start rviz"/>
+  <arg name="rviz_config_file" default="$(find-pkg-share kuka_rsi_driver)/etc/visualization.rviz" description="Absolute rviz config path to use"/>
+
+  <arg name="description_package" description="Package to load robot description macro from"/>
+  <arg name="description_macro_file" description="File name in $(find description_package)/urdf where robot macro is stored"/>
+  <arg name="macro_name" description="Name of robot description macro"/>
+
+  <arg name="use_mock_hardware" default="false" description="Whether to use mock hardware instead of real hardware interface"/>
+  <arg name="mock_gpio_commands" default="false" description="If use_mock_hardware is set to true: Create additional command interfaces for faking GPIO states"/>
+  <arg name="mock_sensor_commands" default="false" description="If use_mock_hardware is set to true: Create additional command interfaces for faking sensor measurements"/>
+
+  <arg name="initial_positions_file" default="$(find-pkg-share kuka_rsi_driver)/config/initial_positions.yaml" description="Initial joint positions when using mock hardware"/>
+
+  <arg name="rsi_listen_ip" default="127.0.0.1" description="Own IP address to use for RSI communication"/>
+  <arg name="rsi_listen_port" default="49152" description="Port to use for RSI communication"/>
+
+  <arg name="prefix" default="" description="Prefix to add to each link and joint name"/>
+
+  <!-- Robot State Publisher Node -->
+  <let name="robot_description_content" value="$(command '$(find-exec xacro) $(find-pkg-share kuka_rsi_driver)/urdf/test_description.urdf.xacro description_package:=$(var description_package) description_macro_file:=$(var description_macro_file) macro_name:=$(var macro_name) use_mock_hardware:=$(var use_mock_hardware) mock_gpio_commands:=$(var mock_gpio_commands) mock_sensor_commands:=$(var mock_sensor_commands) initial_positions_file:=$(var initial_positions_file) rsi_listen_ip:=$(var rsi_listen_ip) rsi_listen_port:=$(var rsi_listen_port) prefix:=$(var prefix)')" />
+
+  <node pkg="robot_state_publisher" exec="robot_state_publisher" name="robot_state_publisher" output="screen">
+    <param name="robot_description" value="$(var robot_description_content)" />
+  </node>
+</launch>
