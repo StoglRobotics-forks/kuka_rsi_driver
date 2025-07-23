@@ -6,6 +6,8 @@
   <xacro:arg name="description_package" default="" />
   <xacro:arg name="description_macro_file" default="" />
   <xacro:arg name="macro_name" default="" />
+  <xacro:arg name="rw_rate" default="250" />
+  <xacro:arg name="is_async" default="true" />
 
   <xacro:arg name="use_mock_hardware" default="false" />
   <xacro:arg name="mock_gpio_commands" default="false" />
@@ -30,6 +32,8 @@
   <xacro:kuka_rsi_driver_control
     name="$(arg macro_name)"
     prefix="$(arg prefix)"
+    rw_rate="$(arg rw_rate)"
+    is_async="$(arg is_async)"
     use_mock_hardware="$(arg use_mock_hardware)"
     mock_gpio_commands="$(arg mock_gpio_commands)"
     mock_sensor_commands="$(arg mock_sensor_commands)"
